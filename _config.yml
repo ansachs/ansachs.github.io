@@ -17,8 +17,8 @@ title: ansachs github profile
 email: ansachs@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   a liquid syntax site built to document my git repos
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://ansachs.github.io/ansachs" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/ansachs" # the subpath of your site, e.g. /blog
+url: "http://ansachs.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  ansachs
 
 # Build settings
