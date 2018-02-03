@@ -1,0 +1,26 @@
+<footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <ul class="footer-list">
+            <li >
+              {% if site.author %}
+                {{ site.author | escape }}
+              {% else %}
+                {{ site.title | escape }}
+              {% endif %}
+              </li>
+              {% if site.email %}
+              <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+              {% endif %}
+            </ul>
+          </div>
+          <div class="col-md-3">
+            {% include social.html %}
+          </div>
+          <div class="col-md-6">
+            <p class="text-muted"> {{ site.description | escape }} </p>
+          </div>
+        </div>
+      </div> 
+</footer>

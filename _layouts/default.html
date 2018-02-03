@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {% include head.html %}
+
+  <body>
+
+    {% include header.html %}
+
+      <div class="container-fluid">
+        <div class="row row-offcanvas row-offcanvas-right" >
+          <div class="col-12 col-md-9">
+          <p class="float-right hidden-md-up">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+            {{ content }}
+          </div>
+            {% include sidebar.html %}
+          </div>
+        
+      </div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>
+
+
