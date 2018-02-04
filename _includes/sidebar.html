@@ -1,14 +1,11 @@
-<div class="col-6 col-md-3 sidebar-offcanvas" id="sidebar">
-  <div class="list-group">
-    <a href="#" class="list-group-item active">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-    <a href="#" class="list-group-item">Link</a>
-  </div>
-</div>
+
+<ul class="nav flex-column">
+
+{% for post in site.posts %}
+    <div class="nav-item">
+        <a href="{{ post.url | relative_url }}" class="nav-link">{{ post.title }}</a>
+    </div>
+    
+{% endfor %}
+
+</ul>

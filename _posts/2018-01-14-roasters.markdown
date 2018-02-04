@@ -1,0 +1,180 @@
+---
+layout: post
+title:  "Expensive Roasters"
+date:   2018-01-14 12:00:00 -0600
+categories: projects
+image: "/assets/images/roasters-user-select.png"
+---
+
+**Motivation**
+
+A project to improve my skills in coding with React and to learn how to use a global store.
+
+**What is Expensive Roasters**
+
+A single page ReactJS app with MobX. It allows a user to order items off a menu, adjust the quantity, and add a tip. A proprietor can login through Okta and edit the menu, including adding items, removing items, and editing items. When the proprietor logs out, the menu is preserved in Mobx and can be used by another user. This was not designed to persist the menu beyond a reload. 
+
+The global store was implemented through test driven development. Views and components also have tests.
+
+**Technologies**
+
+menu: ReactJS with MobX (a class based global store)
+authentication: Okta
+testing: Jest, Enzyme, Jasmine
+
+**Implementation**
+
+A user is presented with a default menu read from a JSON file:
+
+![markdown-img]({{ "/assets/images/roasters-initial-view.png" | absolute_url}})
+
+A user can select items for purchase, alter the quantities, and add a tip:
+
+![markdown-img]({{ "/assets/images/roasters-user-select.png" | absolute_url}})
+
+The propietor can edit the menu after logging in with Okta:
+
+![markdown-img]({{ "/assets/images/roasters-edit-menu.png" | absolute_url}})
+
+The menu is persisted even after logging out and the new items can now be purchased:
+
+![markdown-img]({{ "/assets/images/roasters-persist-edits.png" | absolute_url}})
+
+Part of the global store implemented in MobX:
+
+{% highlight javascript %}
+
+  import {observable, extendObservable} from 'mobx';
+
+  export const tax = .07;
+  export let keyCounter = 0;
+
+  class MenuStore {
+    menuItems = observable.map({});
+    categories = observable([]);
+    order = observable([]);
+
+
+    constructor(startMenu) {
+        this.loadMenu(startMenu)
+    }
+
+    loadMenu(startMenu) {
+      Object.keys(startMenu).forEach((category)=>{
+        this.categories.push(category);
+        let tempArray = [];
+        startMenu[category].forEach((item)=>{
+          let newItem = new Item(category, item['name'], item['description'], item['price']);
+          tempArray.push(newItem);
+        })
+        this.menuItems.set(category, tempArray)
+      })
+    }
+
+    checkInvalid(name) {
+      if (name === "" || typeof name !== 'string') {
+        return true;
+      } 
+      return false;
+    }
+
+    newItem(itemInfo){
+
+      if (this.menuItems.has(itemInfo["name"])) {
+        alert("please add an item with a unique name");
+      } else if (this.checkInvalid(itemInfo["category"]) || this.checkInvalid(itemInfo["name"]) || this.checkInvalid(itemInfo["description"]) || isNaN(itemInfo["price"])) {
+        alert("all values must be valid");
+      } else {
+        const newItem = new Item(itemInfo["category"], itemInfo["name"], itemInfo["description"], itemInfo["price"])
+        if (!this.menuItems.has(itemInfo["category"])) {
+          this.newCategory(itemInfo["category"])
+        } 
+        this.menuItems.get(itemInfo["category"]).push(newItem);
+        return newItem;
+      }
+    }
+
+{% endhighlight %}
+
+Brought in Enzyme to shallow test components:
+
+{% highlight javascript %}
+
+import React from 'react';
+import ReactTestUtils from 'react-dom/test-utils';
+import { findDOMNode } from 'react-dom';
+import { observable, useStrict, extendObservable, toJS} from 'mobx';
+import {observer, Provider} from 'mobx-react';
+import Adapter from 'enzyme-adapter-react-16'
+import Enzyme from "enzyme";
+import { shallow, simulate, mount } from 'enzyme'
+
+import Category from '../../../components/editmenu/category';
+
+Enzyme.configure({ adapter: new Adapter() })
+
+
+...
+
+  describe('edit functions', () => {
+    it('when a category is double clicked it creates an edit prompt and calls renameCategory', () => {
+
+      const domElement = shallow (
+        <Category.wrappedComponent menu={testmenu} items={testmenu.menuItems.get("beef")} category={"beef"} />
+        )
+ 
+      domElement.find('.menu-categories').first().simulate("doubleclick")
+
+      expect(testmenu.renameCategory).toHaveBeenCalledWith("beef", undefined);
+    });
+  });
+});
+
+{% endhighlight %}
+
+secure router implemented with Okta:
+
+{% highlight javascript %}
+{% raw %}
+
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state ={
+      store: new MenuStore(StartMenu)
+    }
+  }  
+
+  render() { 
+    return (
+      <Provider menu={this.state.store} > 
+        <section className="App">
+          <BrowserRouter>
+            <div>
+              <Security issuer={process.env.REACT_APP_SECURITY_ISSUER}
+                      client_id={process.env.REACT_APP_CLIENT_ID}
+                      redirect_uri={window.location.origin + '/implicit/callback'}
+                      onAuthRequired={onAuthRequired} >
+                <Route path='/' component={Navigation} />     
+                <Route path='/' exact={true} component={Menu} />
+                <Route path='/login' render={() => <Login baseUrl={process.env.REACT_APP_BASE_URL} />} />
+                <SecureRoute path='/editmenu' component={EditMenu} />
+                <Route path='/implicit/callback' component={ImplicitCallback} />
+                <Route path='/menu' component={Menu} />
+            </Security>
+          </div>
+        </BrowserRouter>
+        </section>
+      </Provider>
+    );
+  }
+}
+
+export default App;
+
+{% endraw %}
+
+{% endhighlight %}
+
+
+<a href="https://github.com/ansachs/Expensive-Roasters">Expensive Roasters</a>

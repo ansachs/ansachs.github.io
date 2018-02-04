@@ -34,19 +34,23 @@ layout: default
              {% for post in site.posts %}
       
               {% if forloop.index == 1 %}
+              <div class="jumbotron">
                 <div class="row justify-content-center">
-                  <div class="col-lg-8 col-md-8">
-                    <div class="card">
-                      <img class="card-img-top main-img" alt="Card image cap" src={{post.image | relative_url }}>
+                    <div class="card big-card">
+                      <img class="card-img-top big-img" alt="Card image cap" src={{post.image | relative_url }}>
                       <div class="card-block">
-                        <h4 class="card-title">{{ post.title | jsonify }}</h4>
+                        <h4 class="card-title">{{ post.title | escape }}</h4>
+                        <p>{{post.date | date_to_string}}</p>
                         <p class="card-text"></p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <a href="{{ post.url | relative_url }}"  class="btn btn-primary">{{ post.title}}</a>
                       </div>
                     </div>
-                  </div>
                 </div>
+              </div>
                 <div class="row justify-content-center">
+                  <div class="card-deck justify-content-center">
+                
+
               {% else %}
 
               {% comment %}{% raw %}{{ forloop.index | minus: 1|  modulo: 4 | inspect }}{% endraw %}{% endcomment %}
@@ -54,22 +58,23 @@ layout: default
                 {% assign var1 = forloop.index | minus: 1 | modulo: 4 %}
                 
                 {% if var1 == 0 %}
-
+                    </div>
                   </div>
                   <div class="row justify-content-center">
+                    <div class="card-deck justify-content-center">
 
                 {% endif %}
 
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                  <div class="card">
-                    <img class="card-img-top main-img" alt="Card image cap" src={{post.image | relative_url }}>
+                
+                  <div class="card small-card">
+                    <img class="card-img-top small-img" alt="Card image cap" src={{post.image | relative_url }}>
                     <div class="card-block">
                       <h4 class="card-title">{{ post.title | escape }}</h4>
+                      <p>{{post.date | date_to_string}}</p>
                       <p class="card-text"></p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                      <a href="{{ post.url | relative_url }}"  class="btn btn-primary">more</a>
                     </div>
                   </div>
-                </div> 
            
             {% endif %}
 
@@ -81,7 +86,7 @@ layout: default
 
 
             {% endfor %}
-        
+              </div>
             </div>
             
 
