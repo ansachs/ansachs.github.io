@@ -4,6 +4,7 @@ title:  "Tournapets"
 date:   2017-12-24 12:00:00 -0600
 categories: projects
 image: "/assets/images/tournapets-entry.png"
+summary: Bracket tournament for pets and pet owners
 ---
 **Motivation**
 

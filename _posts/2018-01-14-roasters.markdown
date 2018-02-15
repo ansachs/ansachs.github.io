@@ -4,6 +4,8 @@ title:  "Expensive Roasters"
 date:   2018-01-14 12:00:00 -0600
 categories: projects
 image: "/assets/images/roasters-user-select.png"
+summary: |
+  A single page editable barista menu built in React with MobX
 ---
 
 **Motivation**

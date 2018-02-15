@@ -4,6 +4,8 @@ title:  "Chicago Eventshare"
 date:   2017-12-03 12:00:00 -0600
 categories: projects
 image: "/assets/images/eventshare-main.png"
+summary: |
+  event-centric page where users can chat in realtime, view a relevant twitter feed, and post video links through the chat interface
 ---
 
 **Motivation**
