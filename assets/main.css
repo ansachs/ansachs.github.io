@@ -48,6 +48,7 @@ html {
   position: relative;
   top: 0;
   transition: all .1s ease-in;
+  overflow: hidden;
 }
 
 .card:hover {
@@ -58,16 +59,21 @@ html {
 .card article {
   padding: 20px;
   display: flex;
-  
   flex: 1;
   justify-content: space-between;
   flex-direction: column;
   
 }
+
+.card article p {
+  max-height: 150px;
+  overflow: hidden;
+}
 .card .thumb {
   padding-bottom: 60%;
   background-size: cover;
   background-position: center center;
+  /*background-size: auto;*/
 }
 
 .card p { 
@@ -88,7 +94,7 @@ html {
   color: #999;
   text-transform: uppercase;
   letter-spacing: .05em;
-  margin: 2em 0 0 0;
+  margin: 0.5em 0 0 0;
 }
 
 
@@ -100,6 +106,7 @@ html, body {
 
 #main {
   min-height: 100%;
+  padding-top: 20px;
   padding-bottom: 250px;
 }
 

@@ -169,12 +169,14 @@ bracket.propTypes = {
 Data is passed to React view using special tags. Used fetch to send data from React front end
 
 {% highlight ruby %}
-
+{% raw %}
 <div class="jumbotron" style="">
   <%= react_component('image_scroller', props = {images: @media, auth: form_authenticity_token, tournament_id: @tournament.id}, prerender: false) %>
 <div id="offcolor" style="">
-
+{% endraw %}
 {% endhighlight %}
 
-[Github]: https://github.com/itisjohnday/delta-final-project
-[Tournapets]: https://tournapets.herokuapp.com
+<a href="https://github.com/itisjohnday/delta-final-project" target="_blank">Tournapets</a>
+
+<a href="https://tournapets.herokuapp.com" target="_blank">Tournapets live on Heroku</a>
+

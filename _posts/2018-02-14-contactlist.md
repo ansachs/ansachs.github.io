@@ -4,13 +4,13 @@ title: contactlist
 date: 2018-02-14 12:00 -0600
 categories: projects
 image: "/assets/images/contactlist-overall.png"
-summary: | 
+summary: |
   simple React app with a contact list that is sorted by favorite status. Favorite status can be altered by clicking on the star
 ---
 
 **Motivation**
 
-A project to improve my skills in React and utilize an API call 
+A project to improve my skills in React 
 
 **What is Contact List**
 
@@ -18,7 +18,7 @@ A single page React app with contacts that are fetched by an API call and sorted
 
 **Technologies**
 
-List: ReactJS 
+contacts list: ReactJS 
 testing: Jest, Enzyme
 
 **Implementation**
@@ -31,7 +31,7 @@ By clicking on the star in the right hand corner of personal info a user can cha
 
 ![markdown-img]({{ "/assets/images/contactlist-add_to_favorite.png" | absolute_url}}) 
 
-The personal info can be close by clicking on the contacts link in the left hand conder of the personal info page:
+The personal info component can be closed by clicking on the contacts link in the left hand conder of the personal info page:
 
 ![markdown-img]({{ "/assets/images/contactlist-single_view.png" | absolute_url}}) 
 
@@ -42,7 +42,7 @@ The API had no 'CORS allowed' header and had to be called with a proxy that adde
 
 static fetchContacts() {
     const proxyUrl = <my proxy>,
-      targetUrl = 'https://s3.amazonaws.com/technical-challenge/v3/contacts.json'
+      targetUrl = <target api>
 
     return fetch(proxyUrl + targetUrl)
       .then(response => {return response.json();})
