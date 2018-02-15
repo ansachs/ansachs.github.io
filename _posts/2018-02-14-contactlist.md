@@ -18,7 +18,7 @@ A single page React app with contacts that are fetched by an API call and sorted
 
 **Technologies**
 
-contacts list: ReactJS 
+contacts list: ReactJS
 testing: Jest, Enzyme
 
 **Implementation**

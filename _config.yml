@@ -25,6 +25,8 @@ linkedin_username: "alexander-n-sachs"
 markdown: kramdown
 plugins:
   - jekyll-feed
+kramdown:
+  hard_wrap: true
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
