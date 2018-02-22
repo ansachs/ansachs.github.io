@@ -93,28 +93,69 @@ I used the controller to handle links and chat text:
 {% highlight ruby %}
 ...
 def create
-    if current_user == nil
-      redirect_to concert_shared_experiences_path, notice: 'must login in to use chat'
-    elsif params['message']['statement'].match?(/^https:\/\/www.youtube.com\/embed\/[0-9a-zA-Z_\-]*$/)
-    params['message']['link'] = params['message'].delete('statement')
-    new_link = MediaLink.new(media_params)
-    new_link.user_id = current_user.id
-    new_link.media_type = "video"
-    new_link.concert_id = @concert.id
-    new_link.save
-    ActionCable.server.broadcast "room_#{@concert.id}", media: render_video(new_link)
-        render body: nil
-    else
 
-      message = Message.new(message_params)
-      message.user_id = current_user.id
-      message.save
+    youtube_reg = [
+      /^https:\/\/www.youtube.com\/embed\/[0-9a-zA-Z_\-]*$/,
+      /^https:\/\/youtu.be\/[0-9a-zA-Z_\-]*$/
+      ]
 
-      ActionCable.server.broadcast "room_#{@concert.id}", chat: render_message(message)
-        render body: nil
-    end
-  end
+    if params['message']['statement'].strip.match?(Regexp.union(youtube_reg))
+
+      if params['message']['statement'].strip.match?(youtube_reg[1])
+        embed = params['message']['statement'].strip.match(/^https:\/\/youtu.be\/([0-9a-zA-Z_\-]*$)/)[1]
+        params['message']['link'] = "https://www.youtube.com/embed/" + embed 
+      else
+        params['message']['link'] = params['message']['statement'].strip
+      end
+
+
+      record = MediaLink.find_or_initialize_by(media_params)
+      
+      if record.new_record?
+        record.user_id = current_user.id
+        record.media_type = "video"
+        record.concert_id = @concert.id
+        record.save
+        ActionCable.server.broadcast "room_#{@concert.id}", media: render_video(record)
+      else
 ...
 {% endhighlight %}
 
-[Eventshare]: https://github.com/ansachs/eventshare
+One of the challenges was setting up Action Cable, which runs on the client in javascript. I setup the chat as socket driven from the server to the client and via HTTP post from client to server. In retrospect, I could have used sockets both ways.
+
+{% highlight javascript %}
+...
+function submitNewMessage(){
+  $('#submit-text').submit(
+    
+    function(e) {
+      e.preventDefault();
+      const curr_concert = window.location.pathname.match(/concerts\/(\d*)/)[1];
+      const url = '/concerts/' + curr_concert + '/shared_experiences';
+      const text = $('[data-textarea="message"]').val()
+      const token = $('[name="authenticity_token"]').first().val()
+
+      fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': token
+        },
+        body: JSON.stringify({message: {statement: text}, concert_id: curr_concert})
+      }).then((response) => {
+        if (response.redirected == true) {
+          $('.notice').html("please register or login before chatting")
+          $('[data-textarea="message"]').val("")
+          setTimeout(function(){document.querySelector('.notice').innerHTML = ""},10000);
+        }
+      }).catch( err =>{console.log(err)})
+      return false;
+  });
+  ...
+}
+{% endhighlight %}
+
+<a href="https://github.com/ansachs/eventshare" target="_blank">Gigshare</a>
+
+<a href="https://gigshare.herokuapp.com/" target="_blank">Gigshare live on Heroku</a>
