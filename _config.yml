@@ -17,7 +17,7 @@ title: ansachs github profile
 email: ansachs@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Built with Jekyll to document my github repos
-baseurl: "/ansachs" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://ansachs.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  ansachs
 linkedin_username: "alexander-n-sachs"
